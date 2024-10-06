@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 import requests
+import os
+
 
 app = Flask(__name__)
+api_key = os.getenv('EXCHANGE_RATE_API_KEY')
 
 @app.route('/', methods=["POST"])
 def index():
@@ -18,7 +21,7 @@ def index():
     return jsonify(response)
 
 def fetch_conversion_factor(source, target):
-    url = "https://v6.exchangerate-api.com/v6/0277123468f5b1bbe1ad35eb/pair/{}/{}".format(source, target)
+    url = f"https://v6.exchangerate-api.com/v6/{api_key}/pair/{source}/{target}"
     response = requests.get(url)
     respond = response.json()
     return respond["conversion_rate"]
